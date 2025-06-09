@@ -66,7 +66,8 @@ namespace RSCV
     void Application::Run()
     {
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Definindo a cor branca para limpar a tela
-
+        char buffer[4096];
+        uint8_t totalLines = 1;
         while(!glfwWindowShouldClose(s_HWindow))
         {
             glfwPollEvents(); // Tratando eventos
@@ -74,18 +75,48 @@ namespace RSCV
             ImGuiLayer::BeginDraw();
             glClear(GL_COLOR_BUFFER_BIT); // Limpando tela
             
-            ImGui::Begin("Minha Janela");
+
+
+            ImGuiLayer::Docking(); // Tudo abaixo dessa linha poderá ser dockado
+
+            ImGui::Begin("Code", nullptr, ImGuiWindowFlags_NoCollapse);
+            
+            // Inicia a área dos números de linha
+            ImGui::BeginChild("LineNumbers", ImVec2(40, 0), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+            float scrollY = ImGui::GetScrollY();
+            float lineHeight = ImGui::GetTextLineHeight();
+            float regionHeight = ImGui::GetWindowHeight();
+            // Calcula linhas visíveis
+            int startLine = static_cast<int>(scrollY / lineHeight);
+            int endLine = static_cast<int>((scrollY + regionHeight) / lineHeight);
+
+            // Espaço até a primeira linha visível
+            ImGui::Dummy(ImVec2(0, startLine * lineHeight));
+
+            for (int i = startLine; i < endLine && i < totalLines; ++i) {
+                ImGui::Text("%d", i + 1);
+            }
+
+            ImGui::EndChild();
+
+            // InputTextMultiline
+            ImGui::SameLine();
+            ImGui::BeginChild("TextArea", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_HorizontalScrollbar);
+            if (ImGui::InputTextMultiline("##Code Text", buffer, sizeof(buffer), ImGui::GetContentRegionAvail(), ImGuiInputTextFlags_CallbackCharFilter))
+                totalLines++;
+            ImGui::EndChild();
             ImGui::End();
 
             ImGuiLayer::EndDraw();
-            
+
             glfwSwapBuffers(s_HWindow); // Trocando buffers
         }
     }
 
     void Application::GLFWErrorCallback(int32_t code, const char *desc)
     {
-        RSCV_LOG_ERROR("%s - (%d)", code, desc);
+        RSCV_LOG_ERROR("%s - (%d)", desc, code);
     }
 
     void Application::GLFWFramebufferResizeCallback(GLFWwindow *window, int32_t width, int32_t height)

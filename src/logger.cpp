@@ -36,7 +36,7 @@ namespace RSCV
         va_start(argsList, format); // Inicia a lista de argumentos variados
         va_copy(argsCopy, argsList); // Copia antes da primeira leitura
 
-        size_t bufferSize = vsnprintf(nullptr, 0, format, argsCopy); // Verifica o tamanho necessário para a string formatada
+        int bufferSize = vsnprintf(nullptr, 0, format, argsCopy); // Verifica o tamanho necessário para a string formatada
         va_end(argsCopy); // Termina a cópia da lista
 
         if (bufferSize > 0)

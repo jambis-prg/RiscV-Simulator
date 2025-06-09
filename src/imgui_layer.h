@@ -14,5 +14,7 @@ namespace RSCV
 
         static void BeginDraw();
         static void EndDraw();
+
+        static void Docking();
     };
 }
