@@ -6,6 +6,10 @@
 #include <GLFW/glfw3.h>
 #include <imgui_layer.h>
 
+#include "CPU/cpu.h"
+#include "CPU/pipeline.h"
+#include "CPU/single_cycle.h"
+
 namespace RSCV
 {
     bool Application::Init()
@@ -68,6 +72,10 @@ namespace RSCV
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Definindo a cor branca para limpar a tela
         char buffer[4096];
         uint8_t totalLines = 1;
+
+        CPU::SingleCycle singleCycle;
+        CPU::CPU cpu(singleCycle);
+
         while(!glfwWindowShouldClose(s_HWindow))
         {
             glfwPollEvents(); // Tratando eventos
