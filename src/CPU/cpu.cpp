@@ -1,12 +1,14 @@
 #include "cpu.h"
+#include <logger.h>
 
 namespace RSCV::CPU
 {
     void CPU::Cycle(std::array<uint8_t, 1024> &ram)
     {
         const uint32_t instruction = ram[m_PC] | ram[m_PC + 1] << 8 | ram[m_PC + 2] << 16 | ram[m_PC + 3] << 24;
-        const InstructionType opcode = static_cast<InstructionType>(instruction & 0x000000EF);
-        
+        const InstructionType opcode = static_cast<InstructionType>(instruction & 0x0000007F);
+        RSCV_LOG_DEBUG("PC: %x", m_PC);
+        RSCV_LOG_DEBUG("Instruction: %x", ram[m_PC] | ram[m_PC + 1] << 8 | ram[m_PC + 2] << 16 | ram[m_PC + 3] << 24);
         switch (opcode)
         {
         case InstructionType::IMMEDIATE:
@@ -71,6 +73,7 @@ namespace RSCV::CPU
         }
             break;
         default:
+            RSCV_LOG_DEBUG("OPCODE: %x", opcode);
             break;
         }
     }

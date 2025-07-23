@@ -1,0 +1,7 @@
+0x00100513 // addi a0, zero, 1  # function for integer print
+0x02a00593 // addi a1, zero, 42 # the integer value to print
+0x40a585b3 // sub x11 a1 a0
+
+
+
+

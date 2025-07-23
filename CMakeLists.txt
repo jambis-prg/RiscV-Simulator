@@ -21,6 +21,8 @@ src/application.cpp
 src/glfw_custom_allocator.cpp
 src/imgui_layer.cpp
 src/logger.cpp
+src/CPU/cpu.cpp
+src/CPU/single_cycle.cpp
 
 vendor/imgui/backends/imgui_impl_glfw.cpp 
 vendor/imgui/backends/imgui_impl_opengl3.cpp 
@@ -30,5 +32,8 @@ vendor/imgui/imgui_draw.cpp
 vendor/imgui/imgui_tables.cpp
 )
 
-target_include_directories(RiscVSimulator PRIVATE src vendor/imgui/backends vendor/imgui)
-target_link_libraries(RiscVSimulator PRIVATE glfw OpenGL::GL)
+add_subdirectory(vendor/ImGuiFileDialog)
+
+target_include_directories(RiscVSimulator PRIVATE src vendor/imgui/backends vendor/imgui vendor/ImGuiFileDialog)
+target_include_directories(ImGuiFileDialog PRIVATE vendor/imgui)
+target_link_libraries(RiscVSimulator PRIVATE glfw OpenGL::GL ImGuiFileDialog)

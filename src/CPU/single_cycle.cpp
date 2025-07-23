@@ -147,7 +147,7 @@ namespace RSCV::CPU
         default:
             break;
         }
-        return 0;
+        return 4;
     }
 
     uint32_t SingleCycle::Cycle(std::array<uint8_t, 1024> &ram, RegisterContainer &regs, uint32_t PC, const UpperImmediateInstruction &extractedIns)
